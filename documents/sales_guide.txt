@@ -1,0 +1,22 @@
+# TechVision Inc - Sales Playbook
+
+## Ideal Customer Profile
+- B2B SaaS companies with 10-200 employees
+- Annual revenue $1M-$50M
+- Currently using manual spreadsheet processes
+- Pain points: slow reporting, data silos, manual work
+
+## Objection Handling
+Price too high: Emphasize ROI - average client saves 15 hours/week
+Not the right time: Ask what needs to change for timing to be right
+Need to think about it: Offer free 14-day trial, no credit card needed
+
+## Competitor Comparison
+vs Competitor A: We have better API, they have lower price
+vs Competitor B: We have more integrations, they have older UI
+Our unique advantage: Only platform with built-in AI automation
+
+## Closing Techniques
+Always end calls with a clear next step.
+Send follow-up email within 1 hour of any meeting.
+Use case studies from same industry as prospect.

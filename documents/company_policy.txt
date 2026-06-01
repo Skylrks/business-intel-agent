@@ -1,0 +1,23 @@
+# TechVision Inc - Company Policy & FAQ
+
+## Refund Policy
+All digital products have a 30-day money-back guarantee.
+Physical products can be returned within 14 days if unopened.
+To request a refund, email support@techvision.com with order number.
+
+## Pricing
+- Starter Plan: $49/month (up to 5 users)
+- Professional Plan: $149/month (up to 25 users)
+- Enterprise Plan: Custom pricing (unlimited users)
+Annual billing gives 20% discount on all plans.
+
+## Support Hours
+Support team available Monday-Friday, 9AM-6PM EST.
+Emergency support for Enterprise clients: 24/7.
+Average response time: under 2 hours.
+
+## Product Features
+Core features include: dashboard analytics, API access, 
+team collaboration tools, and automated reporting.
+Enterprise features add: SSO, custom integrations, 
+dedicated account manager, and SLA guarantee.
