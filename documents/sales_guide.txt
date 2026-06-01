@@ -25,45 +25,31 @@ Empowering businesses with AI-driven insights to make faster, smarter decisions.
 ### vs Tableau
 - We win on: pricing (40% cheaper), ease of use, AI features
 - They win on: visualization depth, brand recognition
-- Counter: "Tableau requires a dedicated analyst. TechVision works for your whole team."
 
 ### vs Looker (Google)
 - We win on: implementation speed (days vs months), customer support, pricing
 - They win on: Google ecosystem integration
-- Counter: "Looker takes 3-6 months to implement. We're live in 48 hours."
 
 ### vs Power BI
 - We win on: AI capabilities, mobile experience, customer success
 - They win on: Microsoft integration, price for existing Microsoft customers
-- Counter: "Power BI requires significant IT resources. TechVision is self-serve."
 
 ## Objection Handling
 ### "It's too expensive"
-Response: "Let's calculate your ROI. If your team saves 15 hours/week at $50/hour, that's $3,000/month in productivity gains against our $149/month plan. That's 20x ROI."
+Response: ROI calculation — team saves 15 hours/week at $50/hour = $3,000/month vs $149/month plan. That is 20x ROI.
 
 ### "We already have a solution"
-Response: "What does your current reporting process look like? Most of our customers came from [competitor] because they needed [specific feature]. Can I show you how we solve that?"
+Response: Ask what current reporting process looks like. Most customers came from competitors because they needed a specific feature we provide.
 
 ### "Not the right time"
-Response: "I understand. What would need to change for this to become a priority? Is it budget cycle, team bandwidth, or something else?"
-
-### "Need to think about it"
-Response: "Absolutely. What specific questions do you still have? I'd like to make sure you have everything you need to make the best decision."
+Response: Ask what would need to change for this to become a priority.
 
 ## Sales Process
 1. Discovery Call (30 min): Understand pain points, current tools, team size
 2. Demo (45 min): Personalized demo focused on their specific use case
 3. Proof of Concept (14 days): Free trial with real data
 4. Proposal: Custom pricing based on users and features needed
-5. Negotiation: Maximum 15% discount without VP approval
-6. Close: Always get next step commitment before ending any meeting
-
-## Closing Techniques
-- Always end calls with a specific next step and date
-- Send follow-up email within 1 hour of any meeting
-- Use case studies from same industry as prospect
-- Create urgency with end-of-quarter pricing
-- Executive sponsorship for deals over $50K
+5. Close: Always get next step commitment before ending any meeting
 
 ## Customer Success Metrics
 - Average implementation time: 48 hours
@@ -72,11 +58,10 @@ Response: "Absolutely. What specific questions do you still have? I'd like to ma
 - Customer satisfaction (CSAT): 4.8/5
 - Annual churn rate: 4.2% (industry average: 8%)
 - Average contract value: $28,000/year
-- Customer lifetime value: $84,000
 
 ## Key Differentiators
 1. Fastest implementation in the market (48 hours vs industry average 6 weeks)
-2. Only platform with built-in AI automation (no additional AI tools needed)
+2. Only platform with built-in AI automation
 3. Dedicated customer success manager from day one
 4. 99.99% uptime SLA with financial penalties if breached
 5. No data scientist required - truly self-serve analytics
