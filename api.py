@@ -1,5 +1,7 @@
 import os
 import re
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from dotenv import load_dotenv
 from fastapi import FastAPI, BackgroundTasks
 from fastapi.responses import JSONResponse
@@ -18,7 +20,11 @@ app = FastAPI(
     description="Multi-Agent AI System untuk analisis bisnis otomatis",
     version="1.0.0"
 )
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
+@app.get("/ui")
+def ui():
+    return FileResponse("static/index.html")
 
 # =====================
 # SETUP LLM & TOOLS

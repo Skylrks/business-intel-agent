@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Intelligence Agent</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+        .header { background: linear-gradient(135deg, #1e293b, #0f172a); padding: 40px; text-align: center; border-bottom: 1px solid #334155; }
+        .header h1 { font-size: 2.5rem; color: #38bdf8; margin-bottom: 10px; }
+        .header p { color: #94a3b8; font-size: 1.1rem; }
+        .badge { display: inline-block; background: #22c55e; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; margin-left: 10px; }
+        .container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 30px; margin-bottom: 24px; }
+        .card h2 { color: #38bdf8; margin-bottom: 20px; font-size: 1.3rem; }
+        label { display: block; color: #94a3b8; margin-bottom: 8px; font-size: 0.9rem; }
+        input { width: 100%; background: #0f172a; border: 1px solid #334155; color: #e2e8f0; padding: 12px 16px; border-radius: 8px; font-size: 1rem; margin-bottom: 16px; }
+        input:focus { outline: none; border-color: #38bdf8; }
+        button { width: 100%; background: linear-gradient(135deg, #0ea5e9, #38bdf8); color: white; border: none; padding: 14px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+        button:hover { opacity: 0.9; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .result { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 20px; margin-top: 20px; white-space: pre-wrap; font-family: monospace; font-size: 0.9rem; line-height: 1.6; display: none; max-height: 500px; overflow-y: auto; }
+        .loading { text-align: center; padding: 20px; color: #38bdf8; display: none; }
+        .spinner { display: inline-block; width: 24px; height: 24px; border: 3px solid #334155; border-top-color: #38bdf8; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 10px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+        .feature { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 16px; text-align: center; }
+        .feature .icon { font-size: 2rem; margin-bottom: 8px; }
+        .feature h3 { color: #38bdf8; font-size: 0.9rem; margin-bottom: 4px; }
+        .feature p { color: #64748b; font-size: 0.8rem; }
+        .error { background: #450a0a; border: 1px solid #dc2626; color: #fca5a5; border-radius: 8px; padding: 16px; margin-top: 16px; display: none; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤖 Business Intelligence Agent <span class="badge">LIVE</span></h1>
+        <p>Multi-Agent AI System untuk analisis bisnis otomatis</p>
+    </div>
+
+    <div class="container">
+        <div class="features">
+            <div class="feature">
+                <div class="icon">📚</div>
+                <h3>RAG Document Analysis</h3>
+                <p>Analisis dokumen internal perusahaan</p>
+            </div>
+            <div class="feature">
+                <div class="icon">🔍</div>
+                <h3>Competitor Research</h3>
+                <p>Research kompetitor real-time</p>
+            </div>
+            <div class="feature">
+                <div class="icon">📊</div>
+                <h3>BI Report</h3>
+                <p>Laporan eksekutif otomatis</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🚀 Generate Business Intelligence Report</h2>
+            <label>Nama Perusahaan</label>
+            <input type="text" id="company" placeholder="contoh: TechVision Inc" value="TechVision Inc">
+            <label>Industri</label>
+            <input type="text" id="industry" placeholder="contoh: B2B SaaS project management" value="B2B SaaS project management">
+            <button onclick="analyze()" id="btn">Generate Report</button>
+
+            <div class="loading" id="loading">
+                <span class="spinner"></span>
+                AI agents sedang bekerja... (3-10 menit)
+            </div>
+            <div class="error" id="error"></div>
+            <div class="result" id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        async function analyze() {
+            const company = document.getElementById('company').value;
+            const industry = document.getElementById('industry').value;
+            const btn = document.getElementById('btn');
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+            const error = document.getElementById('error');
+
+            if (!company || !industry) {
+                alert('Isi semua field dulu!');
+                return;
+            }
+
+            btn.disabled = true;
+            loading.style.display = 'block';
+            result.style.display = 'none';
+            error.style.display = 'none';
+
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ company_name: company, industry: industry })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    result.textContent = data.report;
+                    result.style.display = 'block';
+                } else {
+                    error.textContent = 'Error: ' + data.message;
+                    error.style.display = 'block';
+                }
+            } catch (err) {
+                error.textContent = 'Connection error: ' + err.message;
+                error.style.display = 'block';
+            } finally {
+                btn.disabled = false;
+                loading.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
