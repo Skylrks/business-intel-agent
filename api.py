@@ -25,9 +25,8 @@ app = FastAPI(
 # =====================
 os.environ["SERPER_API_KEY"] = os.getenv("SERPER_API_KEY", "")
 
-
 llm = LLM(
-    model="openrouter/nvidia/nemotron-3-super-120b-a12b:free",
+    model="openrouter/openai/gpt-oss-120b:free",
     base_url="https://openrouter.ai/api/v1",
     api_key=os.getenv("OPENROUTER_API_KEY", "")
 )
@@ -114,20 +113,28 @@ def run_analysis(company_name: str, industry: str) -> str:
     )
 
     report_task = Task(
-        description=(
-            f"Buat Business Intelligence Report untuk {company_name}.\n"
-            "Format:\n"
-            "## Executive Summary\n"
-            "## Internal Position\n"
-            "## Competitive Landscape\n"
-            "## Opportunities & Threats\n"
-            "## Recommendations\n\n"
-            "Tulis dalam Bahasa Indonesia. Actionable."
-        ),
-        expected_output="Laporan BI lengkap dalam Markdown.",
-        context=[internal_task, competitor_task],
-        agent=report_writer
-    )
+    description=(
+        f"Buat Business Intelligence Report untuk {company_name}.\n"
+        "PENTING: Langsung tulis laporan final dalam Markdown.\n"
+        "JANGAN tulis thought, action, atau observation.\n"
+        "Format wajib:\n"
+        "# Business Intelligence Report\n"
+        "## 1. Executive Summary\n"
+        "## 2. Internal Position\n"
+        "## 3. Competitive Landscape\n"
+        "## 4. Opportunities & Threats\n"
+        "## 5. Recommendations\n\n"
+        "Tulis dalam Bahasa Indonesia. "
+        "Langsung mulai dengan # heading pertama."
+    ),
+    expected_output=(
+        "Laporan BI lengkap dalam format Markdown. "
+        "Dimulai langsung dengan # heading. "
+        "Tidak ada JSON, tidak ada thought/action/observation."
+    ),
+    context=[internal_task, competitor_task],
+    agent=report_writer
+)
 
     crew = Crew(
         agents=[doc_analyst, competitor_analyst, report_writer],

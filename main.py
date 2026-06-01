@@ -153,27 +153,29 @@ competitor_research_task = Task(
 report_writing_task = Task(
     description=(
         "Buat laporan Business Intelligence mingguan untuk {company_name}.\n\n"
+        "PENTING: Langsung tulis laporan final dalam Markdown.\n"
+        "JANGAN tulis thought, action, atau observation.\n\n"
         "Gunakan hasil dari:\n"
         "- Analisis dokumen internal (internal strengths)\n"
         "- Research kompetitor (external landscape)\n\n"
-        "Format laporan:\n"
+        "Format wajib:\n"
         "# Business Intelligence Report - {company_name}\n"
-        "## 1. Executive Summary (3-4 kalimat)\n"
-        "## 2. Internal Position (dari dokumen)\n"
+        "## 1. Executive Summary\n"
+        "## 2. Internal Position\n"
         "## 3. Competitive Landscape\n"
         "## 4. Opportunities & Threats\n"
-        "## 5. Recommendations (minimal 3 action items)\n\n"
-        "Tulis dalam Bahasa Indonesia. Laporan harus actionable."
+        "## 5. Recommendations\n\n"
+        "Tulis dalam Bahasa Indonesia. Langsung mulai dengan # heading."
     ),
     expected_output=(
-        "Laporan BI lengkap dalam format Markdown, "
-        "siap dipresentasikan ke eksekutif."
+        "Laporan BI lengkap dalam format Markdown. "
+        "Dimulai langsung dengan # heading. "
+        "Tidak ada JSON, tidak ada thought/action/observation."
     ),
     context=[internal_analysis_task, competitor_research_task],
     output_file="reports/weekly_report.md",
     agent=report_writer
 )
-
 # Task 4: QA review laporan
 qa_task = Task(
     description=(
