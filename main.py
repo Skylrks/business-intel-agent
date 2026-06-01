@@ -9,7 +9,7 @@ from rag_tool import RAGDocumentTool, load_documents
 os.getenv("NAMA_KEY", "")
 
 llm = LLM(
-    model="openrouter/nvidia/nemotron-3-super-120b-a12b:free",
+    model="openrouter/openai/gpt-oss-120b:free",
     base_url="https://openrouter.ai/api/v1",
     api_key=os.getenv("OPENROUTER_API_KEY", "")
 )
