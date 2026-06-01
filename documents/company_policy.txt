@@ -1,23 +1,64 @@
 # TechVision Inc - Company Policy & FAQ
 
+## About TechVision
+TechVision Inc is a leading B2B SaaS company founded in 2019, headquartered in San Francisco. We serve 500+ enterprise clients across 30 countries with AI-powered business intelligence solutions.
+
 ## Refund Policy
-All digital products have a 30-day money-back guarantee.
-Physical products can be returned within 14 days if unopened.
-To request a refund, email support@techvision.com with order number.
+- Digital products: 30-day money-back guarantee, no questions asked
+- Physical products: 14-day return policy if unopened and in original condition
+- Enterprise contracts: Pro-rated refund within 60 days of contract start
+- To request a refund, email billing@techvision.com with order number and reason
 
-## Pricing
-- Starter Plan: $49/month (up to 5 users)
-- Professional Plan: $149/month (up to 25 users)
-- Enterprise Plan: Custom pricing (unlimited users)
-Annual billing gives 20% discount on all plans.
+## Pricing Plans
+- Starter Plan: $49/month (up to 5 users, 10GB storage, basic analytics)
+- Professional Plan: $149/month (up to 25 users, 100GB storage, advanced analytics)
+- Enterprise Plan: Custom pricing (unlimited users, dedicated server, custom integrations)
+- Annual billing: 20% discount on all plans
+- Non-profit organizations: 40% discount available
 
-## Support Hours
-Support team available Monday-Friday, 9AM-6PM EST.
-Emergency support for Enterprise clients: 24/7.
-Average response time: under 2 hours.
+## Support Policy
+- Starter: Email support, response within 24 hours
+- Professional: Email + chat support, response within 4 hours
+- Enterprise: 24/7 dedicated support, response within 1 hour, dedicated account manager
+- Emergency support hotline: +1-800-TECHVIS (Enterprise only)
+- Average resolution time: under 2 hours for critical issues
 
 ## Product Features
-Core features include: dashboard analytics, API access, 
-team collaboration tools, and automated reporting.
-Enterprise features add: SSO, custom integrations, 
-dedicated account manager, and SLA guarantee.
+### Core Features (All Plans)
+- Real-time dashboard analytics
+- REST API access with 99.9% uptime SLA
+- Team collaboration tools
+- Automated reporting (daily, weekly, monthly)
+- Data export (CSV, PDF, Excel)
+- Mobile app (iOS & Android)
+
+### Professional Features
+- Advanced analytics with AI insights
+- Custom report builder
+- Webhook integrations
+- Priority support queue
+
+### Enterprise Features
+- Single Sign-On (SSO) with SAML 2.0
+- Custom integrations & dedicated API
+- Dedicated account manager
+- SLA guarantee (99.99% uptime)
+- On-premise deployment option
+- Custom data retention policies
+- Advanced security (SOC 2 Type II certified)
+- White-label options available
+
+## Data Security & Compliance
+- SOC 2 Type II certified
+- GDPR compliant
+- HIPAA compliant (Enterprise)
+- Data encrypted at rest (AES-256) and in transit (TLS 1.3)
+- Regular third-party security audits
+- Data centers in US, EU, and APAC
+
+## Integration Partners
+- CRM: Salesforce, HubSpot, Pipedrive
+- Communication: Slack, Microsoft Teams, Zoom
+- Productivity: Google Workspace, Microsoft 365
+- Data: Snowflake, BigQuery, AWS S3
+- Payment: Stripe, PayPal, Braintree

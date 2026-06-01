@@ -4,119 +4,466 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Intelligence Agent</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
-        .header { background: linear-gradient(135deg, #1e293b, #0f172a); padding: 40px; text-align: center; border-bottom: 1px solid #334155; }
-        .header h1 { font-size: 2.5rem; color: #38bdf8; margin-bottom: 10px; }
-        .header p { color: #94a3b8; font-size: 1.1rem; }
-        .badge { display: inline-block; background: #22c55e; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; margin-left: 10px; }
-        .container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
-        .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 30px; margin-bottom: 24px; }
-        .card h2 { color: #38bdf8; margin-bottom: 20px; font-size: 1.3rem; }
-        label { display: block; color: #94a3b8; margin-bottom: 8px; font-size: 0.9rem; }
-        input { width: 100%; background: #0f172a; border: 1px solid #334155; color: #e2e8f0; padding: 12px 16px; border-radius: 8px; font-size: 1rem; margin-bottom: 16px; }
-        input:focus { outline: none; border-color: #38bdf8; }
-        button { width: 100%; background: linear-gradient(135deg, #0ea5e9, #38bdf8); color: white; border: none; padding: 14px; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
-        button:hover { opacity: 0.9; }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
-        .result { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 20px; margin-top: 20px; white-space: pre-wrap; font-family: monospace; font-size: 0.9rem; line-height: 1.6; display: none; max-height: 500px; overflow-y: auto; }
-        .loading { text-align: center; padding: 20px; color: #38bdf8; display: none; }
-        .spinner { display: inline-block; width: 24px; height: 24px; border: 3px solid #334155; border-top-color: #38bdf8; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 10px; }
+        
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0a0e1a;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(99,102,241,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at center, rgba(99,102,241,0.1) 0%, transparent 60%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        .header-content { position: relative; z-index: 1; }
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a5b4fc, #818cf8, #c4b5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+        .header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* STATS */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 30px 20px;
+            background: #0f172a;
+            border-bottom: 1px solid rgba(99,102,241,0.2);
+            flex-wrap: wrap;
+        }
+        .stat { text-align: center; }
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stat-label { color: #64748b; font-size: 0.8rem; margin-top: 4px; }
+
+        /* FEATURES */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .feature {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1px solid rgba(99,102,241,0.2);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .feature:hover {
+            border-color: rgba(99,102,241,0.6);
+            transform: translateY(-2px);
+        }
+        .feature-icon { font-size: 2rem; margin-bottom: 12px; }
+        .feature h3 { color: #a5b4fc; font-size: 0.95rem; margin-bottom: 6px; }
+        .feature p { color: #64748b; font-size: 0.8rem; line-height: 1.5; }
+
+        /* MAIN CONTAINER */
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px 60px; }
+
+        /* CARD */
+        .card {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1px solid rgba(99,102,241,0.2);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+        .card-title {
+            color: #a5b4fc;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* FORM */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        label { color: #94a3b8; font-size: 0.85rem; font-weight: 500; }
+        input {
+            background: #0a0e1a;
+            border: 1px solid rgba(99,102,241,0.3);
+            color: #e2e8f0;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+        input:focus { border-color: #6366f1; }
+        input::placeholder { color: #475569; }
+
+        /* BUTTON */
+        .btn {
+            width: 100%;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        /* LOADING */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(99,102,241,0.2);
+            border-top-color: #6366f1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
-        .feature { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 16px; text-align: center; }
-        .feature .icon { font-size: 2rem; margin-bottom: 8px; }
-        .feature h3 { color: #38bdf8; font-size: 0.9rem; margin-bottom: 4px; }
-        .feature p { color: #64748b; font-size: 0.8rem; }
-        .error { background: #450a0a; border: 1px solid #dc2626; color: #fca5a5; border-radius: 8px; padding: 16px; margin-top: 16px; display: none; }
+        .loading-text { color: #a5b4fc; font-size: 0.95rem; }
+        .loading-steps { color: #64748b; font-size: 0.8rem; margin-top: 8px; }
+
+        /* RESULT */
+        .result-card {
+            display: none;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1px solid rgba(99,102,241,0.3);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .result-header {
+            background: linear-gradient(135deg, #1e1b4b, #312e81);
+            padding: 20px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .result-header h3 { color: #a5b4fc; font-size: 1rem; }
+        .result-meta { color: #64748b; font-size: 0.8rem; }
+        .result-body { padding: 28px; }
+
+        /* MARKDOWN STYLES */
+        .markdown-content h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #a5b4fc;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(99,102,241,0.3);
+        }
+        .markdown-content h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #818cf8;
+            margin: 24px 0 12px;
+        }
+        .markdown-content h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #c4b5fd;
+            margin: 16px 0 8px;
+        }
+        .markdown-content p {
+            color: #cbd5e1;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+        .markdown-content ul, .markdown-content ol {
+            color: #cbd5e1;
+            padding-left: 20px;
+            margin-bottom: 12px;
+        }
+        .markdown-content li { margin-bottom: 6px; line-height: 1.6; }
+        .markdown-content strong { color: #e2e8f0; font-weight: 600; }
+        .markdown-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.85rem;
+        }
+        .markdown-content th {
+            background: rgba(99,102,241,0.2);
+            color: #a5b4fc;
+            padding: 10px 14px;
+            text-align: left;
+            font-weight: 600;
+        }
+        .markdown-content td {
+            padding: 10px 14px;
+            border-bottom: 1px solid rgba(99,102,241,0.1);
+            color: #cbd5e1;
+        }
+        .markdown-content tr:hover td { background: rgba(99,102,241,0.05); }
+
+        /* DOWNLOAD BTN */
+        .download-btn {
+            background: rgba(99,102,241,0.1);
+            border: 1px solid rgba(99,102,241,0.3);
+            color: #a5b4fc;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .download-btn:hover { background: rgba(99,102,241,0.2); }
+
+        /* ERROR */
+        .error {
+            display: none;
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.3);
+            color: #fca5a5;
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #334155;
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(99,102,241,0.1);
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 2rem; }
+            .features { grid-template-columns: 1fr; }
+            .form-grid { grid-template-columns: 1fr; }
+            .stats { gap: 20px; }
+        }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>🤖 Business Intelligence Agent <span class="badge">LIVE</span></h1>
-        <p>Multi-Agent AI System untuk analisis bisnis otomatis</p>
-    </div>
 
-    <div class="container">
-        <div class="features">
-            <div class="feature">
-                <div class="icon">📚</div>
-                <h3>RAG Document Analysis</h3>
-                <p>Analisis dokumen internal perusahaan</p>
+<div class="header">
+    <div class="header-content">
+        <div class="badge">🤖 AI POWERED</div>
+        <h1>Business Intelligence Agent</h1>
+        <p>Multi-Agent AI System that analyzes your business and generates actionable intelligence reports automatically</p>
+    </div>
+</div>
+
+<div class="stats">
+    <div class="stat">
+        <div class="stat-number">3</div>
+        <div class="stat-label">AI Agents Working</div>
+    </div>
+    <div class="stat">
+        <div class="stat-number">~10min</div>
+        <div class="stat-label">Report Generation</div>
+    </div>
+    <div class="stat">
+        <div class="stat-number">RAG</div>
+        <div class="stat-label">Document Intelligence</div>
+    </div>
+    <div class="stat">
+        <div class="stat-number">Live</div>
+        <div class="stat-label">Real-time Research</div>
+    </div>
+</div>
+
+<div class="features">
+    <div class="feature">
+        <div class="feature-icon">📚</div>
+        <h3>RAG Document Analysis</h3>
+        <p>Analyzes internal company documents using vector search for instant insights</p>
+    </div>
+    <div class="feature">
+        <div class="feature-icon">🔍</div>
+        <h3>Competitor Intelligence</h3>
+        <p>Real-time competitor research using live web scraping and search</p>
+    </div>
+    <div class="feature">
+        <div class="feature-icon">📊</div>
+        <h3>Executive BI Report</h3>
+        <p>Generates structured reports with opportunities, threats & recommendations</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="card">
+        <div class="card-title">🚀 Generate Intelligence Report</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Company Name</label>
+                <input type="text" id="company" placeholder="e.g. TechVision Inc" value="TechVision Inc">
             </div>
-            <div class="feature">
-                <div class="icon">🔍</div>
-                <h3>Competitor Research</h3>
-                <p>Research kompetitor real-time</p>
-            </div>
-            <div class="feature">
-                <div class="icon">📊</div>
-                <h3>BI Report</h3>
-                <p>Laporan eksekutif otomatis</p>
+            <div class="form-group">
+                <label>Industry</label>
+                <input type="text" id="industry" placeholder="e.g. B2B SaaS" value="B2B SaaS project management">
             </div>
         </div>
-
-        <div class="card">
-            <h2>🚀 Generate Business Intelligence Report</h2>
-            <label>Nama Perusahaan</label>
-            <input type="text" id="company" placeholder="contoh: TechVision Inc" value="TechVision Inc">
-            <label>Industri</label>
-            <input type="text" id="industry" placeholder="contoh: B2B SaaS project management" value="B2B SaaS project management">
-            <button onclick="analyze()" id="btn">Generate Report</button>
-
-            <div class="loading" id="loading">
-                <span class="spinner"></span>
-                AI agents sedang bekerja... (3-10 menit)
-            </div>
-            <div class="error" id="error"></div>
-            <div class="result" id="result"></div>
-        </div>
+        <button class="btn" onclick="analyze()" id="btn">
+            ⚡ Generate BI Report
+        </button>
+        <div class="error" id="error"></div>
     </div>
 
-    <script>
-        async function analyze() {
-            const company = document.getElementById('company').value;
-            const industry = document.getElementById('industry').value;
-            const btn = document.getElementById('btn');
-            const loading = document.getElementById('loading');
-            const result = document.getElementById('result');
-            const error = document.getElementById('error');
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">AI Agents are working...</div>
+        <div class="loading-steps" id="loading-step">Initializing agents...</div>
+    </div>
 
-            if (!company || !industry) {
-                alert('Isi semua field dulu!');
-                return;
-            }
+    <div class="result-card" id="result-card">
+        <div class="result-header">
+            <h3>📄 Intelligence Report Generated</h3>
+            <button class="download-btn" onclick="downloadReport()">⬇ Download</button>
+        </div>
+        <div class="result-body">
+            <div class="markdown-content" id="result"></div>
+        </div>
+    </div>
+</div>
 
-            btn.disabled = true;
-            loading.style.display = 'block';
-            result.style.display = 'none';
-            error.style.display = 'none';
+<div class="footer">
+    Built with CrewAI + RAG + FastAPI · Deployed on Railway
+</div>
 
-            try {
-                const response = await fetch('/analyze', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ company_name: company, industry: industry })
-                });
+<script>
+    let currentReport = '';
+    const steps = [
+        'Initializing AI agents...',
+        'Analyzing internal documents with RAG...',
+        'Researching competitors in real-time...',
+        'Generating executive report...',
+        'Almost done...'
+    ];
+    let stepIndex = 0;
+    let stepInterval;
 
-                const data = await response.json();
+    async function analyze() {
+        const company = document.getElementById('company').value.trim();
+        const industry = document.getElementById('industry').value.trim();
 
-                if (data.status === 'success') {
-                    result.textContent = data.report;
-                    result.style.display = 'block';
-                } else {
-                    error.textContent = 'Error: ' + data.message;
-                    error.style.display = 'block';
-                }
-            } catch (err) {
-                error.textContent = 'Connection error: ' + err.message;
-                error.style.display = 'block';
-            } finally {
-                btn.disabled = false;
-                loading.style.display = 'none';
-            }
+        if (!company || !industry) {
+            alert('Please fill in all fields!');
+            return;
         }
-    </script>
+
+        const btn = document.getElementById('btn');
+        const loading = document.getElementById('loading');
+        const resultCard = document.getElementById('result-card');
+        const error = document.getElementById('error');
+
+        btn.disabled = true;
+        loading.style.display = 'block';
+        resultCard.style.display = 'none';
+        error.style.display = 'none';
+
+        stepIndex = 0;
+        stepInterval = setInterval(() => {
+            if (stepIndex < steps.length) {
+                document.getElementById('loading-step').textContent = steps[stepIndex];
+                stepIndex++;
+            }
+        }, 90000);
+
+        try {
+            const response = await fetch('/analyze', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ company_name: company, industry: industry })
+            });
+
+            const data = await response.json();
+            clearInterval(stepInterval);
+
+            if (data.status === 'success') {
+                currentReport = data.report;
+                document.getElementById('result').innerHTML = marked.parse(data.report);
+                resultCard.style.display = 'block';
+                resultCard.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                error.textContent = 'Error: ' + data.message;
+                error.style.display = 'block';
+            }
+        } catch (err) {
+            clearInterval(stepInterval);
+            error.textContent = 'Connection error: ' + err.message;
+            error.style.display = 'block';
+        } finally {
+            btn.disabled = false;
+            loading.style.display = 'none';
+        }
+    }
+
+    function downloadReport() {
+        const blob = new Blob([currentReport], { type: 'text/markdown' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'business-intelligence-report.md';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+</script>
 </body>
 </html>
