@@ -1,20 +1,16 @@
 import os
 import re
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from dotenv import load_dotenv
-from fastapi import FastAPI, BackgroundTasks
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI
 from pydantic import BaseModel
 from crewai import Agent, Task, Crew, LLM
 from crewai_tools import ScrapeWebsiteTool, SerperDevTool
 from rag_tool import RAGDocumentTool, load_documents
 
-
 load_dotenv()
-# =====================
-# SETUP FASTAPI
-# =====================
+
 app = FastAPI(
     title="Business Intelligence Agent API",
     description="Multi-Agent AI System untuk analisis bisnis otomatis",
@@ -26,9 +22,6 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 def ui():
     return FileResponse("static/index.html")
 
-# =====================
-# SETUP LLM & TOOLS
-# =====================
 os.environ["SERPER_API_KEY"] = os.getenv("SERPER_API_KEY", "")
 
 llm = LLM(
@@ -37,21 +30,14 @@ llm = LLM(
     api_key=os.getenv("OPENROUTER_API_KEY", "")
 )
 
-# Load dokumen saat server start
 print("📂 Loading dokumen...")
 load_documents("./documents")
 print("✅ Siap!")
 
-# =====================
-# INPUT MODEL
-# =====================
 class AnalysisRequest(BaseModel):
     company_name: str
     industry: str
 
-# =====================
-# HELPER: Buat crew
-# =====================
 def run_analysis(company_name: str, industry: str) -> str:
     rag_tool = RAGDocumentTool()
     search_tool = SerperDevTool()
@@ -119,28 +105,28 @@ def run_analysis(company_name: str, industry: str) -> str:
     )
 
     report_task = Task(
-    description=(
-        f"Buat Business Intelligence Report untuk {company_name}.\n"
-        "PENTING: Langsung tulis laporan final dalam Markdown.\n"
-        "JANGAN tulis thought, action, atau observation.\n"
-        "Format wajib:\n"
-        "# Business Intelligence Report\n"
-        "## 1. Executive Summary\n"
-        "## 2. Internal Position\n"
-        "## 3. Competitive Landscape\n"
-        "## 4. Opportunities & Threats\n"
-        "## 5. Recommendations\n\n"
-        "Tulis dalam Bahasa Indonesia. "
-        "Langsung mulai dengan # heading pertama."
-    ),
-    expected_output=(
-        "Laporan BI lengkap dalam format Markdown. "
-        "Dimulai langsung dengan # heading. "
-        "Tidak ada JSON, tidak ada thought/action/observation."
-    ),
-    context=[internal_task, competitor_task],
-    agent=report_writer
-)
+        description=(
+            f"Buat Business Intelligence Report untuk {company_name}.\n"
+            "PENTING: Tulis LANGSUNG laporan final dalam Markdown.\n"
+            "DILARANG menulis thought, action, observation, atau JSON.\n"
+            "LANGSUNG mulai dengan heading pertama.\n"
+            "Format wajib:\n"
+            "# Business Intelligence Report\n"
+            "## 1. Executive Summary\n"
+            "## 2. Internal Position\n"
+            "## 3. Competitive Landscape\n"
+            "## 4. Opportunities & Threats\n"
+            "## 5. Recommendations\n\n"
+            "Tulis dalam Bahasa Indonesia."
+        ),
+        expected_output=(
+            "Laporan BI lengkap dalam format Markdown. "
+            "Dimulai langsung dengan # heading. "
+            "Tidak ada JSON, tidak ada thought/action/observation."
+        ),
+        context=[internal_task, competitor_task],
+        agent=report_writer
+    )
 
     crew = Crew(
         agents=[doc_analyst, competitor_analyst, report_writer],
@@ -153,7 +139,6 @@ def run_analysis(company_name: str, industry: str) -> str:
         "industry": industry
     })
 
-    # Simpan laporan
     os.makedirs("reports", exist_ok=True)
     filename = f"reports/{company_name.replace(' ', '_')}_report.md"
     with open(filename, "w") as f:
@@ -166,20 +151,12 @@ def run_analysis(company_name: str, industry: str) -> str:
             result_str = result_str[match.start():]
     return result_str
 
-# =====================
-# ENDPOINTS
-# =====================
-
 @app.get("/")
 def root():
     return {
         "status": "running",
         "service": "Business Intelligence Agent API",
-        "version": "1.0.0",
-        "endpoints": {
-            "POST /analyze": "Jalankan analisis bisnis",
-            "GET /health": "Cek status server"
-        }
+        "version": "1.0.0"
     }
 
 @app.get("/health")
@@ -190,24 +167,18 @@ def health():
 def analyze(request: AnalysisRequest):
     try:
         print(f"📊 Mulai analisis: {request.company_name}")
-        
         result = run_analysis(
             company_name=request.company_name,
             industry=request.industry
         )
-        
         return JSONResponse(content={
             "status": "success",
             "company": request.company_name,
             "industry": request.industry,
             "report": result
         })
-        
     except Exception as e:
         return JSONResponse(
             status_code=500,
-            content={
-                "status": "error",
-                "message": str(e)
-            }
+            content={"status": "error", "message": str(e)}
         )
